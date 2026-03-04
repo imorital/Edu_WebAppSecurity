@@ -5,21 +5,24 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 using System.Reflection.Metadata.Ecma335;
 using WebApp.Services;
+using WebApp.Data.Accounts;
 
 namespace WebApp.Pages;
 
 public class RegisterModel : PageModel
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly IEmailService _emailService;
+    private readonly IWebHostEnvironment _environment;
 
     [BindProperty]
     public RegisterViewModel RegisterViewModel { get; set; } = new RegisterViewModel();
 
-    public RegisterModel(UserManager<IdentityUser> userManager, IEmailService emailService)
+    public RegisterModel(UserManager<User> userManager, IEmailService emailService, IWebHostEnvironment environment)
     {
         _userManager = userManager;
         _emailService = emailService;
+        _environment = environment;
     }
 
     public void OnGet()
@@ -34,10 +37,12 @@ public class RegisterModel : PageModel
         // Validate the Email address does not exist (optional as we added a check)
 
         // Create the user
-        var user = new IdentityUser
+        var user = new User
         {
             UserName = RegisterViewModel.Email,
-            Email = RegisterViewModel.Email
+            Email = RegisterViewModel.Email,
+            Department = RegisterViewModel.Department,
+            Position = RegisterViewModel.Position
         };
 
         var result = await _userManager.CreateAsync(user, RegisterViewModel.Password);
@@ -58,6 +63,12 @@ public class RegisterModel : PageModel
             pageName: "/Account/ConfirmEmail",
             values: new { userId = user.Id, token = confirmationToken }
             );
+
+        if (_environment.IsDevelopment())
+        {
+            // Development environment - skip email sending and just confirm directly
+            return Redirect(confirmationLink ?? "");
+        }
 
         await _emailService.SendEmailAsync(
             user.Email, 
@@ -85,4 +96,10 @@ public class RegisterViewModel
     [Display(Name = "Confirm password")]
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    [Required]
+    public String Department { get; set; } = string.Empty;
+
+    [Required]
+    public String Position { get; set; } = string.Empty;
 }
