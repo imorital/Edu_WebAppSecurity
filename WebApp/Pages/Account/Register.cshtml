@@ -56,6 +56,15 @@
                 <span class="text-danger" asp-validation-for="RegisterViewModel.Position"></span>
             </div>
         </div>
+        <div class="row mb-3">
+            <div class="col-2">
+                <label asp-for="RegisterViewModel.Manager" class="form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="text" asp-for="RegisterViewModel.Manager" class="form-control" />
+                <span class="text-danger" asp-validation-for="RegisterViewModel.Manager"></span>
+            </div>
+        </div>
 
         <div class="row mb-3">
             <div class="col-2">

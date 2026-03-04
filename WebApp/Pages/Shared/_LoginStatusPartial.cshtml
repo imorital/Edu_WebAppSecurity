@@ -3,7 +3,7 @@
      && User.Identity.IsAuthenticated)
 {
     <text>
-        Hello, @User.Identity.Name
+        Hello, @User.Identity.Name (Manager: @User.Claims.FirstOrDefault(c => c.Type == "Manager")?.Value)
         <form method="post" class="form-inline" asp-page="/Account/Logout">
             <button type="submit" class="ml-2 btn btn-link navbar-btn">Logout</button>
         </form>

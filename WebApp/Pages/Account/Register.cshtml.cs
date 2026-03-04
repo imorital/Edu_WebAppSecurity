@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Reflection.Metadata.Ecma335;
 using WebApp.Services;
 using WebApp.Data.Accounts;
+using System.Security.Claims;
 
 namespace WebApp.Pages;
 
@@ -45,7 +46,10 @@ public class RegisterModel : PageModel
             Position = RegisterViewModel.Position
         };
 
+        var claimManager = new Claim("Manager", RegisterViewModel.Manager);
+
         var result = await _userManager.CreateAsync(user, RegisterViewModel.Password);
+
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
@@ -54,6 +58,8 @@ public class RegisterModel : PageModel
             }
             return Page();
         }
+
+        await _userManager.AddClaimAsync(user, claimManager);
 
         // Successful registration
         //Generate a token and send email confirmation
@@ -102,4 +108,7 @@ public class RegisterViewModel
 
     [Required]
     public String Position { get; set; } = string.Empty;
+
+    [Required]
+    public String Manager { get; set; } = string.Empty;
 }
