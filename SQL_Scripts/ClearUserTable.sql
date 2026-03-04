@@ -6,9 +6,17 @@ SELECT usr.Email, cl.*
       [UdemySecurityCourse].[dbo].[AspNetUsers] usr
 WHERE cl.[UserId] = usr.[Id]
 
+SELECT usr.Email, rl.* 
+ FROM [UdemySecurityCourse].[dbo].[AspNetUserRoles] rl,
+      [UdemySecurityCourse].[dbo].[AspNetUsers] usr
+WHERE rl.[UserId] = usr.[Id]
+
+SELECT *
+ FROM [UdemySecurityCourse].[dbo].[AspNetRoles]
 /*
 
 DELETE FROM [UdemySecurityCourse].[dbo].[AspNetUserClaims];
+DELETE FROM [UdemySecurityCourse].[dbo].[AspNetRoles];
 DELETE FROM [UdemySecurityCourse].[dbo].[AspNetUsers];
 
 */

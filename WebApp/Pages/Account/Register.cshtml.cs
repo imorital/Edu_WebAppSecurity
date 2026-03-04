@@ -60,6 +60,7 @@ public class RegisterModel : PageModel
         }
 
         await _userManager.AddClaimAsync(user, claimManager);
+        await _userManager.AddToRoleAsync(user, "Admin");
 
         // Successful registration
         //Generate a token and send email confirmation
