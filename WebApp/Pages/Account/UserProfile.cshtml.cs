@@ -38,6 +38,7 @@ public class UserProfileModel : PageModel
         UserProfile.Position = user.Position;
         UserProfile.Manager = managerClaim?.Value ?? "Unknown";
         UserProfile.IsAdmin = isAdmin;
+        UserProfile.TwoFactorEnabled = user.TwoFactorEnabled;
 
         SuccessMessage = "Profile updated successfully.";
         return Page();
@@ -80,6 +81,9 @@ public class UserProfileModel : PageModel
                 user.Department = UserProfile.Department;
             if (user.Position != UserProfile.Position)
                 user.Position = UserProfile.Position;
+
+            if (user.TwoFactorEnabled != UserProfile.TwoFactorEnabled)
+                user.TwoFactorEnabled = UserProfile.TwoFactorEnabled;
 
             await _userManager.UpdateAsync(user);
         }
@@ -125,4 +129,7 @@ public class UserProfileViewModel
     public string Manager { get; set; } = string.Empty;
 
     public bool IsAdmin { get; set; }
+
+    [Display(Name = "Two-Factor Authentication Enabled")]
+    public bool TwoFactorEnabled { get; set; }
 }

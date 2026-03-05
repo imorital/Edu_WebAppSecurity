@@ -30,14 +30,23 @@ namespace WebApp.Pages.Account
             }
 
             var result = await _signInManager.PasswordSignInAsync(
-                Credential.Email, 
-                Credential.Password, 
-                Credential.RememberMe, 
+                Credential.Email,
+                Credential.Password,
+                Credential.RememberMe,
                 lockoutOnFailure: false);
 
             if (result.Succeeded)
             {
                 return RedirectToPage("/Index");
+            }
+
+            if (result.RequiresTwoFactor)
+            {
+                return RedirectToPage("/Account/TwoFactor",
+                    new { 
+                        Email = Credential.Email,
+                        RememberMe = Credential.RememberMe
+                    });
             }
 
             if (result.IsLockedOut)
