@@ -6,8 +6,17 @@
 <h3>Step 1</h3>
 
 <p>
-    Please enter the key into to your authenticator app: <b>@Model.SetupMFA.Key</b>
+    Please enter the key into to your authenticator app:
+    <b>@Model.SetupMFA.Key</b>
 </p>
+
+@if (Model.SetupMFA.QrCodeBase64 != null)
+{
+    <p>
+        Alternatively, you can scan the QR code below with your authenticator app:
+        <img src="data:image/png;base64,@Model.SetupMFA.QrCodeBase64" alt="Scan me with your Authenticator App" width="250" height="250" />
+    </p>
+}
 
 <br />
 
@@ -38,6 +47,7 @@ else
                     <span class="text-danger" asp-validation-for="SetupMFA.SecurityCode"></span>
                 </div>
             </div>
+
 
             <div class="row mb-3">
                 <div class="col-2">
